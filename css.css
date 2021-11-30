@@ -1,0 +1,140 @@
+
+#text1{
+    position: absolute;
+    top: 31px;
+left: 138px;
+width: 1940px;
+height: 28px;
+text-align: left;
+font: normal normal normal 22px/29px EB Garamond;
+letter-spacing: 1.54px;
+color: #ffffff;
+opacity: 1;
+}
+#text2{
+    position: absolute;
+    top: 33px;
+    left: 728px;
+    width: 90px;
+    height: 25px;
+    text-align: left;
+    font: normal normal normal 18px/25px PingFang TC;
+    letter-spacing: 1.26px;
+    color: #FFFFFF;
+    opacity: 1;
+}
+#text3{
+    position: absolute;
+    top: 33px;
+    left: 852px;
+    width: 90px;
+    height: 25px;
+    text-align: left;
+    font: normal normal normal 18px/25px PingFang TC;
+    letter-spacing: 1.26px;
+    color: #FFFFFF;
+    opacity: 1;
+}
+#text4{
+    position: absolute;
+    top: 33px;
+    left: 976px;
+    width: 90px;
+    height: 25px;
+    text-align: left;
+    font: normal normal normal 18px/25px PingFang TC;
+    letter-spacing: 1.26px;
+    color: #FFFFFF;
+    opacity: 1;
+}
+#text5{
+    position: absolute;
+    top: 33px;
+    left: 1100px;
+    width: 90px;
+    height: 25px;
+    text-align: left;
+    font: normal normal normal 18px/25px PingFang TC;
+    letter-spacing: 1.26px;
+    color: #FFFFFF;
+    opacity: 1;
+}
+#text6{
+    position: absolute;
+    top: 33px;
+    left: 1224px;
+    width: 90px;
+    height: 25px;
+    text-align: left;
+    font: normal normal normal 18px/25px PingFang TC;
+    letter-spacing: 1.26px;
+    color: #FFFFFF;
+    opacity: 1;
+}
+#word {
+    position: absolute;
+    top: 200px;
+    left: 437px;
+    width: 567px;
+    height: 419px;
+    background: transparent url('img/taiwan.png') 0% 0% no-repeat padding-box;
+    opacity: 1;
+}
+.banner01{
+    
+    top: 0px;
+    left: 0px;
+    width: 1440px;
+    height: 960px;
+    background: transparent url('banner01.jpg') 0% 0% no-repeat padding-box;
+    opacity: 1;
+}
+.topv{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1440px;
+    height: 90px;
+    opacity: 1;
+}
+#serb{
+    position: absolute;
+    top: 660px;
+    left: 336px;
+    width: 768px;
+    height: 110px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 4px 8px #0000004B;
+    border-radius: 15px;
+    opacity: 1;
+}
+#sela{
+    position: absolute;
+    top: 690px;
+    left: 354px;
+    width: 270px;
+    height: 50px;
+    background: #EBEBEB 0% 0% no-repeat padding-box;
+    border-radius: 10px;
+    opacity: 1;
+}
+#selb{
+    position: absolute;
+    top: 690px;
+    left: 642px;
+    width: 270px;
+    height: 50px;
+    background: #EBEBEB 0% 0% no-repeat padding-box;
+    border-radius: 10px;
+    opacity: 1;
+}
+#serbut{
+    position: absolute;
+    top: 690px;
+    left: 944px;
+    width: 142px;
+    height: 50px;
+    background: #E8CB89 0% 0% no-repeat padding-box;
+    border-radius: 15px;
+    opacity: 1;
+}
