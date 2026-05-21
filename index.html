@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyan Cat 階段闖關下班計時器</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            background-color: #0d1117;
+            color: #fff;
+            font-family: "Microsoft JhengHei", sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .panel-container {
+            width: 100%;
+            max-width: 800px;
+            background: #161b22;
+            border: 2px solid #30363d;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #58a6ff;
+            font-size: 20px;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* 宇宙 Nyan Cat 容器 */
+        @keyframes moveStars {
+            from { background-position: 0 0, 50px 50px; }
+            to { background-position: -200px 0, -150px 50px; }
+        }
+
+        .nyan-container-bg {
+            background-color: #003366;
+            background-image:
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px);
+            background-size: 100px 100px, 150px 150px;
+            background-position: 0 0, 50px 50px;
+            animation: moveStars 3s linear infinite;
+            
+            width: 100%;
+            border: 4px solid #111;
+            padding: 30px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            font-family: '"Press Start 2P", monospace';
+            border-radius: 4px;
+        }
+
+        .title-info {
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            font-size: 18px;
+            text-shadow: 2px 2px 0px #000;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            font-family: 'Press Start 2P', monospace;
+        }
+
+        .text-info {
+            width: 100%;
+            text-align: center;
+            color: #ddd;
+            font-size: 11px;
+            text-shadow: 1px 1px 0px #000;
+            margin-bottom: 25px;
+            line-height: 2;
+            font-family: 'Press Start 2P', monospace;
+        }
+
+        /* 軌道外框 */
+        .track-wrapper {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background-color: transparent;
+            border: 2px solid #111;
+            overflow: hidden;
+            border-radius: 6px;
+        }
+
+        @keyframes nyanRainbowFlow {
+            from { background-position: 0 0; }
+            to { background-position: -100% 0; }
+        }
+
+        .nyan-rainbow-animated {
+            background: repeating-linear-gradient(
+                to bottom,
+                #ff0000 0%, #ff0000 16.6%,
+                #ff9900 16.6%, #ff9900 33.3%,
+                #ffff00 33.3%, #ffff00 50%,
+                #33ff00 50%, #33ff00 66.6%,
+                #0099ff 66.6%, #0099ff 83.3%,
+                #6633ff 83.3%, #6633ff 100%
+            );
+            background-size: 200% 100%;
+            animation: nyanRainbowFlow 2s linear infinite;
+            transition: width 0.5s linear;
+            position: absolute;             /* 改為絕對定位以利於精準置中 */
+            left: 0;
+            top: 52%;                       /* 配合下方 transform 達成垂直置中 */
+            transform: translateY(-50%);    /* 完美垂直置中 */
+            height: 60%;                    /* 依要求調整高度為 80% */
+            width: 0%;
+        }
+
+        .nyan-cat-img {
+            position: absolute;
+            height: 70px;
+            top: 50%;
+            transform: translate(-70%, -50%);
+            transition: left 0.5s linear;
+            left: 0%;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+<div class="panel-container">
+
+    
+    <div class="nyan-container-bg">
+        <div class="title-info" id="titleInfo">STAGE 0: PREPARING</div>
+        <div class="text-info" id="textInfo">Loading mission...</div>
+        <div class="track-wrapper">
+            <div class="nyan-rainbow-animated" id="nyanRainbow"></div>
+            <img class="nyan-cat-img" id="nyanCatImg" src="https://newscrewdriver.com/wp-content/uploads/2018/10/poptartcat320240.gif" alt="Nyan Cat">
+        </div>
+    </div>
+</div>
+
+<script>
+    const titleInfo = document.getElementById('titleInfo');
+    const textInfo = document.getElementById('textInfo');
+    const nyanRainbow = document.getElementById('nyanRainbow');
+    const nyanCatImg = document.getElementById('nyanCatImg');
+
+    // 精準作息時間軸配置（已新增 08:30 上班到開盤的關卡）
+    const TIMELINE = [
+        { type: 'work',  name: 'READY STAGE', start: [8, 30],  end: [9, 0] },
+        { type: 'work',  name: 'STAGE 1',     start: [9, 0],   end: [10, 0] },
+        { type: 'rest',  name: 'BREAK 1',     start: [10, 0],  end: [10, 10] },
+        { type: 'work',  name: 'STAGE 2',     start: [10, 10], end: [11, 50] },
+        { type: 'rest',  name: 'LUNCH',       start: [11, 50], end: [13, 0] },
+        { type: 'work',  name: 'STAGE 3',     start: [13, 0],  end: [15, 0] },
+        { type: 'rest',  name: 'BREAK 2',     start: [15, 0],  end: [15, 30] },
+        { type: 'work',  name: 'FINAL STAGE', start: [15, 30], end: [17, 30] }
+    ];
+
+    function updateProgress() {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth();
+        const currentDate = now.getDate();
+
+        // 當前時間的總分鐘數
+        const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+        // 1. 還沒到 08:30 上班時間
+        if (nowMinutes < 8 * 60 + 30) {
+            const startTarget = new Date(currentYear, currentMonth, currentDate, 8, 30, 0);
+            const diffSec = Math.floor((startTarget - now) / 1000);
+            titleInfo.innerHTML = "NOT YET STARTED";
+            textInfo.innerHTML = `NEXT TARGET: READY STAGE (08:30)<br>COUNTDOWN: ${formatSeconds(diffSec)}<br><br>CURRENT PROGRESS: 0%`;
+            nyanRainbow.style.width = '0%';
+            nyanCatImg.style.left = '0%';
+            return;
+        }
+
+        // 2. 已經過了 17:30 下班時間
+        if (nowMinutes >= 17 * 60 + 30) {
+            titleInfo.innerHTML = "ALL STAGES CLEAR!";
+            textInfo.innerHTML = "ALL MISSIONS ACCOMPLISHED!<br>TIME TO GO HOME NYAN~ 🎉<br><br>TOTAL PROGRESS: 100%";
+            nyanRainbow.style.width = '100%';
+            nyanCatImg.style.left = '100%';
+            return;
+        }
+
+        // 3. 判斷目前落在哪個階段
+        for (let i = 0; i < TIMELINE.length; i++) {
+            const current = TIMELINE[i];
+            const startMin = current.start[0] * 60 + current.start[1];
+            const endMin = current.end[0] * 60 + current.end[1];
+
+            if (nowMinutes >= startMin && nowMinutes < endMin) {
+                const startTime = new Date(currentYear, currentMonth, currentDate, current.start[0], current.start[1], 0);
+                const endTime = new Date(currentYear, currentMonth, currentDate, current.end[0], current.end[1], 0);
+                
+                // 計算當前關卡的總秒數與已過去秒數
+                const totalStageSec = (endTime - startTime) / 1000;
+                const elapsedStageSec = (now - startTime) / 1000;
+                const remainingStageSec = (endTime - now) / 1000;
+
+                let percentage = (elapsedStageSec / totalStageSec) * 100;
+                if (percentage < 0) percentage = 0;
+                if (percentage > 100) percentage = 100;
+
+                // 根據工作或休息調整顯示邏輯
+                if (current.type === 'work') {
+                    // 工作/準備關卡：貓咪努力往前奔跑衝向 100%
+                    titleInfo.innerHTML = `⚔️ ${current.name} ⚔️`;
+                    textInfo.innerHTML = `TARGET: MISSION CLEAR AT ${formatTimeStr(current.end)}<br>STAGE REMAINING: <span style="color: #33ff00;">${formatSeconds(remainingStageSec)}</span><br><br>STAGE PROGRESS: ${percentage.toFixed(2)}%`;
+                    nyanRainbow.style.width = `${percentage}%`;
+                    nyanCatImg.style.left = `${percentage}%`;
+                } else {
+                    // 休息時間：貓咪停在 100% 終點處享受終點
+                    titleInfo.innerHTML = `☕ ${current.name} ☕`;
+                    textInfo.innerHTML = `STATUS: RECHARGING FAT...🔋<br>NEXT MISSION STARTS IN: <span style="color: #ff9900;">${formatSeconds(remainingStageSec)}</span><br><br>STAGE PROGRESS: 100%`;
+                    nyanRainbow.style.width = '100%';
+                    nyanCatImg.style.left = '100%';
+                }
+                break;
+            }
+        }
+    }
+
+    // 輔助函式：將剩餘秒數轉為 HH:MM:SS
+    function formatSeconds(totalSeconds) {
+        const hrs = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+        const mins = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+        const secs = Math.floor(totalSeconds % 60).toString().padStart(2, '0');
+        return `${hrs}H ${mins}M ${secs}S`;
+    }
+
+    // 輔助函式：將 [時, 分] 轉為 "HH:MM" 格式
+    function formatTimeStr(timeArr) {
+        return `${timeArr[0].toString().padStart(2, '0')}:${timeArr[1].toString().padStart(2, '0')}`;
+    }
+
+    // 每秒刷新
+    setInterval(updateProgress, 1000);
+    updateProgress();
+</script>
+
+</body>
+</html>
