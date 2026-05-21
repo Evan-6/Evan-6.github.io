@@ -157,14 +157,14 @@
 
     // 精準作息時間軸配置（已新增 08:30 上班到開盤的關卡）
     const TIMELINE = [
-        { type: 'work',  name: 'READY STAGE', start: [8, 30],  end: [9, 0] },
+        { type: 'work',  name: 'READY STAGE', start: [8, 20],  end: [9, 0] },
         { type: 'work',  name: 'STAGE 1',     start: [9, 0],   end: [10, 0] },
         { type: 'rest',  name: 'BREAK 1',     start: [10, 0],  end: [10, 10] },
         { type: 'work',  name: 'STAGE 2',     start: [10, 10], end: [11, 50] },
         { type: 'rest',  name: 'LUNCH',       start: [11, 50], end: [13, 0] },
         { type: 'work',  name: 'STAGE 3',     start: [13, 0],  end: [15, 0] },
-        { type: 'rest',  name: 'BREAK 2',     start: [15, 0],  end: [15, 30] },
-        { type: 'work',  name: 'FINAL STAGE', start: [15, 30], end: [17, 30] }
+        { type: 'rest',  name: 'BREAK 2',     start: [15, 0],  end: [15, 10] },
+        { type: 'work',  name: 'FINAL STAGE', start: [15, 10], end: [17, 30] }
     ];
 
     function updateProgress() {
